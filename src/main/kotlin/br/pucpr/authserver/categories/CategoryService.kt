@@ -1,5 +1,6 @@
 package br.pucpr.authserver.categories
 
+import br.pucpr.authserver.products.ProductRepository
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Sort
 import org.springframework.data.repository.findByIdOrNull
@@ -9,7 +10,8 @@ import org.springframework.web.server.ResponseStatusException
 
 @Service
 class CategoryService(
-    val repository: CategoryRepository
+    val repository: CategoryRepository,
+    val productRepository: ProductRepository
 ) {
     fun insert(category: Category): Category {
         if (repository.findByName(category.name) != null) {
@@ -41,6 +43,9 @@ class CategoryService(
     fun deleteById(id: Long) {
         val category = findByIdOrNull(id)
             ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Category $id not found!")
+        if (productRepository.existsByCategoryId(id)) {
+            throw ResponseStatusException(HttpStatus.CONFLICT, "Category $id still has products")
+        }
         repository.delete(category)
         log.warn("Category {} deleted", id)
     }
