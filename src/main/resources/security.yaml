@@ -1,0 +1,5 @@
+security:
+  issuer: authserver
+  secret: ${JWT_SECRET:troque-este-segredo-em-producao-por-um-valor-longo}
+  expire-hours: 2
+  admin-expire-hours: 1

@@ -1,4 +1,6 @@
 spring:
+  config:
+    import: "classpath:security.yaml"
   application:
     name: authserver
   web:
@@ -33,9 +35,3 @@ springdoc:
 logging:
   file:
     path: ./logs
-
-security:
-  issuer: authserver
-  secret: ${JWT_SECRET:troque-este-segredo-em-producao-por-um-valor-longo}
-  expire-hours: 2
-  admin-expire-hours: 1
