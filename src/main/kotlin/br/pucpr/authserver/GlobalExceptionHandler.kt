@@ -5,6 +5,8 @@ import org.springframework.beans.TypeMismatchException
 import org.springframework.core.annotation.AnnotatedElementUtils
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.*
+import org.springframework.security.access.AccessDeniedException
+import org.springframework.security.core.AuthenticationException
 import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -91,7 +93,6 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body(problemDetail)
     }
 
-    /* Habilitar com o Spring Security
         @ExceptionHandler(AuthenticationException::class)
         fun handleAuthenticationException(ex: AuthenticationException): ResponseEntity<ProblemDetail> {
             val problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, "Unauthorized")
@@ -104,7 +105,7 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
             val problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, "Forbidden")
             problemDetail.setProperty("errors", mapOf("detail" to listOf(ex.message ?: "Access denied")))
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(problemDetail)
-        }*/
+        }
 
     @ExceptionHandler(DataIntegrityViolationException::class)
     fun handleDatabaseConstraints(ex: DataIntegrityViolationException): ResponseEntity<ProblemDetail> {

@@ -8,4 +8,4 @@ fun oneUser(
     email: String = "${name.lowercase().replace(" ", ".")}@email.com",
     password: String = "password",
     roles: MutableSet<Role> = mutableSetOf()
-) = User(id, name, email, password, roles)
+) = User(id = id, email = email, password = password, name = name, roles = roles)

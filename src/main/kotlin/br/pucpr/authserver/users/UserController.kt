@@ -1,5 +1,6 @@
 package br.pucpr.authserver.users
 
+import br.pucpr.authserver.users.requests.LoginRequest
 import br.pucpr.authserver.users.requests.PatchUserRequest
 import br.pucpr.authserver.users.requests.UserRequest
 import br.pucpr.authserver.users.responses.UserResponse
@@ -37,6 +38,12 @@ class UserController(
     ) = userService.insert(user.toUser())
         .let { UserResponse(it) }
         .let { ResponseEntity.status(HttpStatus.CREATED).body(it) }
+
+    @PostMapping("/login")
+    fun login(
+        @Valid @RequestBody credentials: LoginRequest
+    ) = userService.login(credentials.email!!, credentials.password!!)
+        .let { ResponseEntity.ok(it) }
 
     @PatchMapping("/{id}")
     fun update(
