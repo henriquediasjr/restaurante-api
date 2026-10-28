@@ -1,11 +1,13 @@
 package br.pucpr.authserver.products
 
+import br.pucpr.authserver.users.SortDir
 import jakarta.validation.Valid
 import jakarta.validation.constraints.Min
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
+import java.math.BigDecimal
 
 @RestController
 @RequestMapping("/products")
@@ -14,7 +16,16 @@ class ProductController(
     val service: ProductService
 ) {
     @GetMapping
-    fun list() = service.findAll()
+    fun list(
+        @RequestParam name: String?,
+        @RequestParam categoryId: Long?,
+        @RequestParam minPrice: BigDecimal?,
+        @RequestParam maxPrice: BigDecimal?,
+        @RequestParam tag: String?,
+        @RequestParam(defaultValue = "name") sortBy: String,
+        @RequestParam(defaultValue = "ASC") sortDir: String
+    ) = service
+        .search(name, categoryId, minPrice, maxPrice, tag, sortBy, SortDir.findOrThrow(sortDir))
         .map { ProductResponse(it) }
         .let { ResponseEntity.ok(it) }
 

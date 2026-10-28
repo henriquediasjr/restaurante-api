@@ -1,6 +1,7 @@
 package br.pucpr.authserver.products
 
 import br.pucpr.authserver.categories.CategoryRepository
+import br.pucpr.authserver.users.SortDir
 import br.pucpr.authserver.tags.TagRepository
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Sort
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.server.ResponseStatusException
+import java.math.BigDecimal
 
 @Service
 class ProductService(
@@ -30,7 +32,23 @@ class ProductService(
             .also { log.info("Product {} created!", it.id) }
     }
 
-    fun findAll() = repository.findAll(Sort.by("name"))
+    fun search(
+        name: String?,
+        categoryId: Long?,
+        minPrice: BigDecimal?,
+        maxPrice: BigDecimal?,
+        tag: String?,
+        sortBy: String,
+        dir: SortDir
+    ): List<Product> {
+        val field = SORT_FIELDS.find { it == sortBy }
+            ?: throw ResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                "Invalid sort field! Use ${SORT_FIELDS.joinToString(", ")}"
+            )
+        val sort = if (dir == SortDir.ASC) Sort.by(field) else Sort.by(field).descending()
+        return repository.search(name, categoryId, minPrice, maxPrice, tag?.lowercase(), sort)
+    }
 
     fun findByIdOrNull(id: Long) = repository.findByIdOrNull(id)
 
@@ -82,6 +100,7 @@ class ProductService(
     }
 
     companion object {
+        private val SORT_FIELDS = listOf("name", "price", "id")
         private val log = LoggerFactory.getLogger(ProductService::class.java)
     }
 }
