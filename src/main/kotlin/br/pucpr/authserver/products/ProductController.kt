@@ -46,4 +46,20 @@ class ProductController(
         @Min(1) @PathVariable id: Long
     ): ResponseEntity<Void> = service.deleteById(id)
         .let { ResponseEntity.noContent().build() }
+
+    @PutMapping("/{id}/tags/{name}")
+    fun addTag(
+        @Min(1) @PathVariable id: Long,
+        @PathVariable name: String
+    ): ResponseEntity<Void> =
+        if (service.addTag(id, name)) ResponseEntity.ok().build()
+        else ResponseEntity.noContent().build()
+
+    @DeleteMapping("/{id}/tags/{name}")
+    fun removeTag(
+        @Min(1) @PathVariable id: Long,
+        @PathVariable name: String
+    ): ResponseEntity<Void> =
+        if (service.removeTag(id, name)) ResponseEntity.ok().build()
+        else ResponseEntity.noContent().build()
 }
