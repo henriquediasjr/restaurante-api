@@ -5,7 +5,8 @@ Trabalho da disciplina **Backend: Web Services** (PUCPR) - Opcao 1, extensao do 
 ## Integrantes
 
 - Henrique Dias (henriquediasjr)
-- _(adicionar demais membros da equipe)_
+- Lucas
+- Julia
 
 ## Video de apresentacao
 
