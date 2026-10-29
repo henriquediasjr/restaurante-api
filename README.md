@@ -70,3 +70,7 @@ Autenticacao: `POST /users/login` retorna o token; enviar `Authorization: Bearer
 - **Validacao** com Bean Validation nos requests.
 - **Configuracao externa** em `security.yaml` via `@ConfigurationProperties` validado.
 - Senhas com BCrypt.
+
+## Demonstracao
+
+Com o servidor rodando, `./scripts/demo.sh` executa passo a passo (enter entre os passos) todos os fluxos: CRUD, associacoes, consulta com filtros, login, 401/403/409/422. Use `NOPAUSE=1` para rodar direto.
